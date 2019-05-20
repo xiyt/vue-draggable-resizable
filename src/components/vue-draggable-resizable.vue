@@ -624,10 +624,10 @@ export default {
       if (!deltaX && !deltaY) return
 
       // 这里修改deltaX和deltaY值，要除以当前的缩放比例 ， by xiyt
-      this.rawTop = mouseClickPosition.top - deltaY / this.scale
-      this.rawBottom = mouseClickPosition.bottom + deltaY / this.scale
-      this.rawLeft = mouseClickPosition.left - deltaX / this.scale
-      this.rawRight = mouseClickPosition.right + deltaX / this.scale
+      this.rawTop = mouseClickPosition.top - parseInt(deltaY / this.scale)
+      this.rawBottom = mouseClickPosition.bottom + parseInt(deltaY / this.scale)
+      this.rawLeft = mouseClickPosition.left - parseInt(deltaX / this.scale)
+      this.rawRight = mouseClickPosition.right + parseInt(deltaX / this.scale)
 
       this.$emit('dragging', this.left, this.top)
     },
@@ -646,16 +646,17 @@ export default {
 
       // 这里修改deltaX和deltaY值，要除以当前的缩放比例 ， by xiyt
       if (handle.includes('b')) {
-        this.rawBottom = mouseClickPosition.bottom + deltaY / this.scale
+        this.rawBottom =
+          mouseClickPosition.bottom + parseInt(deltaY / this.scale)
       } else if (handle.includes('t')) {
-        this.rawTop = mouseClickPosition.top - deltaY / this.scale
+        this.rawTop = mouseClickPosition.top - parseInt(deltaY / this.scale)
       }
 
       // 这里修改deltaX和deltaY值，要除以当前的缩放比例 ， by xiyt
       if (handle.includes('r')) {
-        this.rawRight = mouseClickPosition.right + deltaX / this.scale
+        this.rawRight = mouseClickPosition.right + parseInt(deltaX / this.scale)
       } else if (handle.includes('l')) {
-        this.rawLeft = mouseClickPosition.left - deltaX / this.scale
+        this.rawLeft = mouseClickPosition.left - parseInt(deltaX / this.scale)
       }
 
       this.$emit('resizing', this.left, this.top, this.width, this.height)
