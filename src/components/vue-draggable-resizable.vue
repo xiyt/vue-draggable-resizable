@@ -1,6 +1,5 @@
 <template>
-  <div
-    :style="style"
+  <div :style="style"
     :class="[{
       [classNameActive]: enabled,
       [classNameDragging]: dragging,
@@ -9,16 +8,13 @@
       [classNameResizable]: resizable
     }, className]"
     @mousedown="elementDown"
-    @touchstart="elementTouchDown"
-  >
-    <div
-      v-for="handle in actualHandles"
+    @touchstart="elementTouchDown">
+    <div v-for="handle in actualHandles"
       :key="handle"
       :class="[classNameHandle, classNameHandle + '-' + handle]"
       :style="{display: enabled ? 'block' : 'none'}"
       @mousedown.stop.prevent="handleDown(handle, $event)"
-      @touchstart.stop.prevent="handleTouchDown(handle, $event)"
-    >
+      @touchstart.stop.prevent="handleTouchDown(handle, $event)">
       <slot :name="handle"></slot>
     </div>
     <slot></slot>
@@ -26,7 +22,11 @@
 </template>
 
 <script>
-import { matchesSelectorToParentElements, addEvent, removeEvent } from '../utils/dom'
+import {
+  matchesSelectorToParentElements,
+  addEvent,
+  removeEvent
+} from '../utils/dom'
 
 const events = {
   mouse: {
@@ -124,52 +124,52 @@ export default {
     w: {
       type: Number,
       default: 200,
-      validator: (val) => val > 0
+      validator: val => val > 0
     },
     h: {
       type: Number,
       default: 200,
-      validator: (val) => val > 0
+      validator: val => val > 0
     },
     minWidth: {
       type: Number,
       default: 0,
-      validator: (val) => val >= 0
+      validator: val => val >= 0
     },
     minHeight: {
       type: Number,
       default: 0,
-      validator: (val) => val >= 0
+      validator: val => val >= 0
     },
     maxWidth: {
       type: Number,
       default: null,
-      validator: (val) => val >= 0
+      validator: val => val >= 0
     },
     maxHeight: {
       type: Number,
       default: null,
-      validator: (val) => val >= 0
+      validator: val => val >= 0
     },
     x: {
       type: Number,
       default: 0,
-      validator: (val) => typeof val === 'number'
+      validator: val => typeof val === 'number'
     },
     y: {
       type: Number,
       default: 0,
-      validator: (val) => typeof val === 'number'
+      validator: val => typeof val === 'number'
     },
     z: {
       type: [String, Number],
       default: 'auto',
-      validator: (val) => (typeof val === 'string' ? val === 'auto' : val >= 0)
+      validator: val => (typeof val === 'string' ? val === 'auto' : val >= 0)
     },
     handles: {
       type: Array,
       default: () => ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'],
-      validator: (val) => {
+      validator: val => {
         const s = new Set(['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'])
 
         return new Set(val.filter(h => s.has(h))).size === val.length
@@ -186,7 +186,7 @@ export default {
     axis: {
       type: String,
       default: 'both',
-      validator: (val) => ['x', 'y', 'both'].includes(val)
+      validator: val => ['x', 'y', 'both'].includes(val)
     },
     grid: {
       type: Array,
@@ -203,6 +203,10 @@ export default {
     onResizeStart: {
       type: Function,
       default: null
+    },
+    scale: {
+      type: Number,
+      default: 1
     }
   },
 
@@ -241,9 +245,15 @@ export default {
 
   created: function () {
     // eslint-disable-next-line
-    if (this.maxWidth && this.minWidth > this.maxWidth) console.warn('[Vdr warn]: Invalid prop: minWidth cannot be greater than maxWidth')
+    if (this.maxWidth && this.minWidth > this.maxWidth)
+      console.warn(
+        '[Vdr warn]: Invalid prop: minWidth cannot be greater than maxWidth'
+      )
     // eslint-disable-next-line
-    if (this.maxWidth && this.minHeight > this.maxHeight) console.warn('[Vdr warn]: Invalid prop: minHeight cannot be greater than maxHeight')
+    if (this.maxWidth && this.minHeight > this.maxHeight)
+      console.warn(
+        '[Vdr warn]: Invalid prop: minHeight cannot be greater than maxHeight'
+      )
 
     this.resetBoundsAndMouseState()
   },
@@ -252,7 +262,7 @@ export default {
       this.$el.ondragstart = () => false
     }
 
-    [this.parentWidth, this.parentHeight] = this.getParentSize()
+    ;[this.parentWidth, this.parentHeight] = this.getParentSize()
 
     this.rawRight = this.parentWidth - this.rawWidth - this.rawLeft
     this.rawBottom = this.parentHeight - this.rawHeight - this.rawTop
@@ -340,8 +350,14 @@ export default {
         }
 
         if (
-          (this.dragHandle && !matchesSelectorToParentElements(target, this.dragHandle, this.$el)) ||
-          (this.dragCancel && matchesSelectorToParentElements(target, this.dragCancel, this.$el))
+          (this.dragHandle &&
+            !matchesSelectorToParentElements(
+              target,
+              this.dragHandle,
+              this.$el
+            )) ||
+          (this.dragCancel &&
+            matchesSelectorToParentElements(target, this.dragCancel, this.$el))
         ) {
           return
         }
@@ -357,8 +373,12 @@ export default {
           this.dragging = true
         }
 
-        this.mouseClickPosition.mouseX = e.touches ? e.touches[0].pageX : e.pageX
-        this.mouseClickPosition.mouseY = e.touches ? e.touches[0].pageY : e.pageY
+        this.mouseClickPosition.mouseX = e.touches
+          ? e.touches[0].pageX
+          : e.pageX
+        this.mouseClickPosition.mouseY = e.touches
+          ? e.touches[0].pageY
+          : e.pageY
 
         this.mouseClickPosition.left = this.left
         this.mouseClickPosition.right = this.right
@@ -376,13 +396,33 @@ export default {
     calcDragLimits () {
       return {
         minLeft: (this.parentWidth + this.left) % this.grid[0],
-        maxLeft: Math.floor((this.parentWidth - this.width - this.left) / this.grid[0]) * this.grid[0] + this.left,
+        maxLeft:
+          Math.floor(
+            (this.parentWidth - this.width - this.left) / this.grid[0]
+          ) *
+            this.grid[0] +
+          this.left,
         minRight: (this.parentWidth + this.right) % this.grid[0],
-        maxRight: Math.floor((this.parentWidth - this.width - this.right) / this.grid[0]) * this.grid[0] + this.right,
+        maxRight:
+          Math.floor(
+            (this.parentWidth - this.width - this.right) / this.grid[0]
+          ) *
+            this.grid[0] +
+          this.right,
         minTop: (this.parentHeight + this.top) % this.grid[1],
-        maxTop: Math.floor((this.parentHeight - this.height - this.top) / this.grid[1]) * this.grid[1] + this.top,
+        maxTop:
+          Math.floor(
+            (this.parentHeight - this.height - this.top) / this.grid[1]
+          ) *
+            this.grid[1] +
+          this.top,
         minBottom: (this.parentHeight + this.bottom) % this.grid[1],
-        maxBottom: Math.floor((this.parentHeight - this.height - this.bottom) / this.grid[1]) * this.grid[1] + this.bottom
+        maxBottom:
+          Math.floor(
+            (this.parentHeight - this.height - this.bottom) / this.grid[1]
+          ) *
+            this.grid[1] +
+          this.bottom
       }
     },
     deselect (e) {
@@ -493,20 +533,38 @@ export default {
         limits.maxBottom = bottom + Math.floor((height - minH) / gridY) * gridY
 
         if (maxW) {
-          limits.minLeft = Math.max(limits.minLeft, this.parentWidth - right - maxW)
-          limits.minRight = Math.max(limits.minRight, this.parentWidth - left - maxW)
+          limits.minLeft = Math.max(
+            limits.minLeft,
+            this.parentWidth - right - maxW
+          )
+          limits.minRight = Math.max(
+            limits.minRight,
+            this.parentWidth - left - maxW
+          )
         }
 
         if (maxH) {
-          limits.minTop = Math.max(limits.minTop, this.parentHeight - bottom - maxH)
-          limits.minBottom = Math.max(limits.minBottom, this.parentHeight - top - maxH)
+          limits.minTop = Math.max(
+            limits.minTop,
+            this.parentHeight - bottom - maxH
+          )
+          limits.minBottom = Math.max(
+            limits.minBottom,
+            this.parentHeight - top - maxH
+          )
         }
 
         if (this.lockAspectRatio) {
           limits.minLeft = Math.max(limits.minLeft, left - top * aspectFactor)
           limits.minTop = Math.max(limits.minTop, top - left / aspectFactor)
-          limits.minRight = Math.max(limits.minRight, right - bottom * aspectFactor)
-          limits.minBottom = Math.max(limits.minBottom, bottom - right / aspectFactor)
+          limits.minRight = Math.max(
+            limits.minRight,
+            right - bottom * aspectFactor
+          )
+          limits.minBottom = Math.max(
+            limits.minBottom,
+            bottom - right / aspectFactor
+          )
         }
       } else {
         limits.minLeft = null
@@ -550,17 +608,26 @@ export default {
       const grid = this.grid
       const mouseClickPosition = this.mouseClickPosition
 
-      const tmpDeltaX = axis && axis !== 'y' ? mouseClickPosition.mouseX - (e.touches ? e.touches[0].pageX : e.pageX) : 0
-      const tmpDeltaY = axis && axis !== 'x' ? mouseClickPosition.mouseY - (e.touches ? e.touches[0].pageY : e.pageY) : 0
+      const tmpDeltaX =
+        axis && axis !== 'y'
+          ? mouseClickPosition.mouseX -
+            (e.touches ? e.touches[0].pageX : e.pageX)
+          : 0
+      const tmpDeltaY =
+        axis && axis !== 'x'
+          ? mouseClickPosition.mouseY -
+            (e.touches ? e.touches[0].pageY : e.pageY)
+          : 0
 
       const [deltaX, deltaY] = this.snapToGrid(this.grid, tmpDeltaX, tmpDeltaY)
 
       if (!deltaX && !deltaY) return
 
-      this.rawTop = mouseClickPosition.top - deltaY
-      this.rawBottom = mouseClickPosition.bottom + deltaY
-      this.rawLeft = mouseClickPosition.left - deltaX
-      this.rawRight = mouseClickPosition.right + deltaX
+      // 这里修改deltaX和deltaY值，要除以当前的缩放比例 ， by xiyt
+      this.rawTop = mouseClickPosition.top - deltaY / this.scale
+      this.rawBottom = mouseClickPosition.bottom + deltaY / this.scale
+      this.rawLeft = mouseClickPosition.left - deltaX / this.scale
+      this.rawRight = mouseClickPosition.right + deltaX / this.scale
 
       this.$emit('dragging', this.left, this.top)
     },
@@ -568,23 +635,27 @@ export default {
       const handle = this.handle
       const mouseClickPosition = this.mouseClickPosition
 
-      const tmpDeltaX = mouseClickPosition.mouseX - (e.touches ? e.touches[0].pageX : e.pageX)
-      const tmpDeltaY = mouseClickPosition.mouseY - (e.touches ? e.touches[0].pageY : e.pageY)
+      const tmpDeltaX =
+        mouseClickPosition.mouseX - (e.touches ? e.touches[0].pageX : e.pageX)
+      const tmpDeltaY =
+        mouseClickPosition.mouseY - (e.touches ? e.touches[0].pageY : e.pageY)
 
       const [deltaX, deltaY] = this.snapToGrid(this.grid, tmpDeltaX, tmpDeltaY)
 
       if (!deltaX && !deltaY) return
 
+      // 这里修改deltaX和deltaY值，要除以当前的缩放比例 ， by xiyt
       if (handle.includes('b')) {
-        this.rawBottom = mouseClickPosition.bottom + deltaY
+        this.rawBottom = mouseClickPosition.bottom + deltaY / this.scale
       } else if (handle.includes('t')) {
-        this.rawTop = mouseClickPosition.top - deltaY
+        this.rawTop = mouseClickPosition.top - deltaY / this.scale
       }
 
+      // 这里修改deltaX和deltaY值，要除以当前的缩放比例 ， by xiyt
       if (handle.includes('r')) {
-        this.rawRight = mouseClickPosition.right + deltaX
+        this.rawRight = mouseClickPosition.right + deltaX / this.scale
       } else if (handle.includes('l')) {
-        this.rawLeft = mouseClickPosition.left - deltaX
+        this.rawLeft = mouseClickPosition.left - deltaX / this.scale
       }
 
       this.$emit('resizing', this.left, this.top, this.width, this.height)
@@ -626,7 +697,9 @@ export default {
         width: this.width + 'px',
         height: this.height + 'px',
         zIndex: this.zIndex,
-        ...(this.dragging && this.disableUserSelect ? userSelectNone : userSelectAuto)
+        ...(this.dragging && this.disableUserSelect
+          ? userSelectNone
+          : userSelectAuto)
       }
     },
     actualHandles () {
@@ -641,13 +714,21 @@ export default {
       return this.parentHeight - this.top - this.bottom
     },
     resizingOnX () {
-      return (Boolean(this.handle) && (this.handle.includes('l') || this.handle.includes('r')))
+      return (
+        Boolean(this.handle) &&
+        (this.handle.includes('l') || this.handle.includes('r'))
+      )
     },
     resizingOnY () {
-      return (Boolean(this.handle) && (this.handle.includes('t') || this.handle.includes('b')))
+      return (
+        Boolean(this.handle) &&
+        (this.handle.includes('t') || this.handle.includes('b'))
+      )
     },
     isCornerHandle () {
-      return (Boolean(this.handle) && ['tl', 'tr', 'br', 'bl'].includes(this.handle))
+      return (
+        Boolean(this.handle) && ['tl', 'tr', 'br', 'bl'].includes(this.handle)
+      )
     }
   },
 
