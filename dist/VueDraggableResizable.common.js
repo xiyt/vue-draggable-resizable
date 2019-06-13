@@ -1013,13 +1013,13 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules//.cache//vue-loader","cacheIdentifier":"14310da3-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vue-draggable-resizable.vue?vue&type=template&id=aaf382e2&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules//.cache//vue-loader","cacheIdentifier":"14310da3-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vue-draggable-resizable.vue?vue&type=template&id=68f3dc50&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[( _obj = {}, _obj[_vm.classNameActive] = _vm.enabled, _obj[_vm.classNameDragging] = _vm.dragging, _obj[_vm.classNameResizing] = _vm.resizing, _obj[_vm.classNameDraggable] = _vm.draggable, _obj[_vm.classNameResizable] = _vm.resizable, _obj ), _vm.className],style:(_vm.style),on:{"mousedown":_vm.elementDown,"touchstart":_vm.elementTouchDown}},[_vm._l((_vm.actualHandles),function(handle){return _c('div',{key:handle,class:[_vm.classNameHandle, _vm.classNameHandle + '-' + handle],style:({display: _vm.enabled ? 'block' : 'none'}),on:{"mousedown":function($event){$event.stopPropagation();$event.preventDefault();_vm.handleDown(handle, $event)},"touchstart":function($event){$event.stopPropagation();$event.preventDefault();_vm.handleTouchDown(handle, $event)}}},[_vm._t(handle)],2)}),_vm._t("default")],2)
 var _obj;}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/vue-draggable-resizable.vue?vue&type=template&id=aaf382e2&
+// CONCATENATED MODULE: ./src/components/vue-draggable-resizable.vue?vue&type=template&id=68f3dc50&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js
 var get_own_property_descriptor = __webpack_require__("268f");
@@ -1797,7 +1797,7 @@ var eventsFor = events.mouse;
       this.rawBottom = mouseClickPosition.bottom + scaledDeltaY;
       this.rawLeft = mouseClickPosition.left - scaledDeltaX;
       this.rawRight = mouseClickPosition.right + scaledDeltaX;
-      this.$emit('dragging', this.left, this.top, scaledDeltaX, scaledDeltaY);
+      this.$emit('dragging', e, this.left, this.top, scaledDeltaX, scaledDeltaY);
     },
     handleMove: function handleMove(e) {
       var handle = this.handle;
