@@ -630,7 +630,7 @@ export default {
       this.rawBottom = mouseClickPosition.bottom + scaledDeltaY
       this.rawLeft = mouseClickPosition.left - scaledDeltaX
       this.rawRight = mouseClickPosition.right + scaledDeltaX
-      this.$emit('dragging', e, this.left, this.top, scaledDeltaX, scaledDeltaY)
+      this.$emit('dragging', this.left, this.top, scaledDeltaX, scaledDeltaY)
     },
     handleMove (e) {
       const handle = this.handle
