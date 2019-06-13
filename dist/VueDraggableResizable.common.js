@@ -1013,13 +1013,13 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules//.cache//vue-loader","cacheIdentifier":"14310da3-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vue-draggable-resizable.vue?vue&type=template&id=2d97038a&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules//.cache//vue-loader","cacheIdentifier":"14310da3-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vue-draggable-resizable.vue?vue&type=template&id=aaf382e2&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[( _obj = {}, _obj[_vm.classNameActive] = _vm.enabled, _obj[_vm.classNameDragging] = _vm.dragging, _obj[_vm.classNameResizing] = _vm.resizing, _obj[_vm.classNameDraggable] = _vm.draggable, _obj[_vm.classNameResizable] = _vm.resizable, _obj ), _vm.className],style:(_vm.style),on:{"mousedown":_vm.elementDown,"touchstart":_vm.elementTouchDown}},[_vm._l((_vm.actualHandles),function(handle){return _c('div',{key:handle,class:[_vm.classNameHandle, _vm.classNameHandle + '-' + handle],style:({display: _vm.enabled ? 'block' : 'none'}),on:{"mousedown":function($event){$event.stopPropagation();$event.preventDefault();_vm.handleDown(handle, $event)},"touchstart":function($event){$event.stopPropagation();$event.preventDefault();_vm.handleTouchDown(handle, $event)}}},[_vm._t(handle)],2)}),_vm._t("default")],2)
 var _obj;}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/vue-draggable-resizable.vue?vue&type=template&id=2d97038a&
+// CONCATENATED MODULE: ./src/components/vue-draggable-resizable.vue?vue&type=template&id=aaf382e2&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js
 var get_own_property_descriptor = __webpack_require__("268f");
@@ -1786,13 +1786,18 @@ var eventsFor = events.mouse;
           deltaX = _this$snapToGrid2[0],
           deltaY = _this$snapToGrid2[1];
 
-      if (!deltaX && !deltaY) return; // 这里修改deltaX和deltaY值，要除以当前的缩放比例 ， by xiyt
+      if (!deltaX && !deltaY) return;
 
-      this.rawTop = mouseClickPosition.top - parse_int_default()(deltaY / this.scale);
-      this.rawBottom = mouseClickPosition.bottom + parse_int_default()(deltaY / this.scale);
-      this.rawLeft = mouseClickPosition.left - parse_int_default()(deltaX / this.scale);
-      this.rawRight = mouseClickPosition.right + parse_int_default()(deltaX / this.scale);
-      this.$emit('dragging', this.left, this.top);
+      var scaledDeltaX = parse_int_default()(deltaX / this.scale);
+
+      var scaledDeltaY = parse_int_default()(deltaY / this.scale); // 这里修改deltaX和deltaY值，要除以当前的缩放比例 ， by xiyt
+
+
+      this.rawTop = mouseClickPosition.top - scaledDeltaY;
+      this.rawBottom = mouseClickPosition.bottom + scaledDeltaY;
+      this.rawLeft = mouseClickPosition.left - scaledDeltaX;
+      this.rawRight = mouseClickPosition.right + scaledDeltaX;
+      this.$emit('dragging', this.left, this.top, scaledDeltaX, scaledDeltaY);
     },
     handleMove: function handleMove(e) {
       var handle = this.handle;

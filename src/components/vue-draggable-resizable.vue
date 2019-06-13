@@ -623,13 +623,15 @@ export default {
 
       if (!deltaX && !deltaY) return
 
+      let scaledDeltaX = parseInt(deltaX / this.scale)
+      let scaledDeltaY = parseInt(deltaY / this.scale)
       // 这里修改deltaX和deltaY值，要除以当前的缩放比例 ， by xiyt
-      this.rawTop = mouseClickPosition.top - parseInt(deltaY / this.scale)
-      this.rawBottom = mouseClickPosition.bottom + parseInt(deltaY / this.scale)
-      this.rawLeft = mouseClickPosition.left - parseInt(deltaX / this.scale)
-      this.rawRight = mouseClickPosition.right + parseInt(deltaX / this.scale)
+      this.rawTop = mouseClickPosition.top - scaledDeltaY
+      this.rawBottom = mouseClickPosition.bottom + scaledDeltaY
+      this.rawLeft = mouseClickPosition.left - scaledDeltaX
+      this.rawRight = mouseClickPosition.right + scaledDeltaX
 
-      this.$emit('dragging', this.left, this.top)
+      this.$emit('dragging', this.left, this.top, scaledDeltaX, scaledDeltaY)
     },
     handleMove (e) {
       const handle = this.handle
